@@ -22,7 +22,7 @@ const bookSchema = new mongoose.Schema({
 
     price: {
         type: Number,
-        min: 1,
+        min: [ 1, "Price is too low for Amazon selling"],
     },
 
     discount: {
@@ -39,16 +39,27 @@ const bookSchema = new mongoose.Schema({
 
 const Book = mongoose.model("Book", bookSchema);
 
-let book1 = new Book({
-    title: "Marvel comics",
-    price: "600",
-    genre: ["comics", "superheros", "fiction"]
+Book.findByIdAndUpdate("6a4cf81348a493bbb0519d25",
+     {price: -100}, 
+     {runValidators: true})
+
+.then((res) => {
+    console.log(res);
+})
+.catch(err => {
+    console.log(err.errors.price.properties.message);
 });
 
-book1
-.save()
-.then(res => {
-    console.log(res);
-}).catch((err) => {
-    console.log(err);
-});
+// let book1 = new Book({
+//     title: "Marvel comics",
+//     price: "600",
+//     genre: ["comics", "superheros", "fiction"]
+// });
+
+// book1
+// .save()
+// .then(res => {
+//     console.log(res);
+// }).catch((err) => {
+//     console.log(err);
+// });
